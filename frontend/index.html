@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车吃了啥 - 饮食健康App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="logo">🥗 车吃了啥</div>
+            <div class="nav-links">
+                <a href="#" onclick="showPage('home')">首页</a>
+                <a href="#" onclick="showPage('record')">记录饮食</a>
+                <a href="#" onclick="showPage('feedback')">反馈体验</a>
+                <a href="#" onclick="showPage('recommendations')">获得建议</a>
+                <a href="#" onclick="showPage('profile')">我的信息</a>
+            </div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            
+            <!-- 首页 -->
+            <div id="home" class="page active">
+                <div class="welcome-section">
+                    <h1>👋 欢迎使用 车吃了啥</h1>
+                    <p>一个基于你的反馈的智能饮食建议App</p>
+                    
+                    <div class="features">
+                        <div class="feature-card">
+                            <div class="icon">📝</div>
+                            <h3>记录你吃的</h3>
+                            <p>记录每一顿饭，追踪营养摄入</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="icon">💬</div>
+                            <h3>反馈你的体验</h3>
+                            <p>告诉我们吃完怎么样，帮助算法学习</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="icon">🎯</div>
+                            <h3>获得个性化建议</h3>
+                            <p>AI根据你的反馈推荐最适合的菜谱</p>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="showPage('record')">开始记录 →</button>
+                </div>
+            </div>
+            
+            <!-- 记录饮食页面 -->
+            <div id="record" class="page">
+                <h2>📝 记录我的饮食</h2>
+                <div class="form-section">
+                    <form id="dietForm" onsubmit="submitDietRecord(event)">
+                        <div class="form-group">
+                            <label>选择菜谱</label>
+                            <select id="recipeSelect" required>
+                                <option value="">-- 选择菜谱 --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>进食时间</label>
+                            <select id="mealType" required>
+                                <option value="">-- 选择进食时间 --</option>
+                                <option value="早餐">早餐</option>
+                                <option value="午餐">午餐</option>
+                                <option value="晚餐">晚餐</option>
+                                <option value="零食">零食</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>食用份数</label>
+                            <input type="number" id="quantity" min="0.5" step="0.5" value="1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>备注</label>
+                            <textarea id="notes" placeholder="其他说明..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">保存记录</button>
+                    </form>
+                </div>
+                
+                <!-- 最近的记录 -->
+                <h3>📋 最近的记录</h3>
+                <div id="dietRecordsList" class="records-list"></div>
+            </div>
+            
+            <!-- 反馈体验页面 -->
+            <div id="feedback" class="page">
+                <h2>💬 反馈我的体验</h2>
+                <div class="form-section">
+                    <form id="feedbackForm" onsubmit="submitFeedback(event)">
+                        <div class="form-group">
+                            <label>选择进食记录</label>
+                            <select id="recordSelect" required>
+                                <option value="">-- 选择饮食记录 --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>👅 这道菜好吃吗？ (1-5)</label>
+                            <div class="rating-group">
+                                <input type="radio" name="taste" value="1" id="taste1"><label for="taste1">😖</label>
+                                <input type="radio" name="taste" value="2" id="taste2"><label for="taste2">😕</label>
+                                <input type="radio" name="taste" value="3" id="taste3"><label for="taste3">😐</label>
+                                <input type="radio" name="taste" value="4" id="taste4"><label for="taste4">🙂</label>
+                                <input type="radio" name="taste" value="5" id="taste5"><label for="taste5">😋</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>🤗 吃完舒服吗？ (1-5)</label>
+                            <div class="rating-group">
+                                <input type="radio" name="comfort" value="1" id="comfort1"><label for="comfort1">很难受</label>
+                                <input type="radio" name="comfort" value="2" id="comfort2"><label for="comfort2">有点难受</label>
+                                <input type="radio" name="comfort" value="3" id="comfort3"><label for="comfort3">一般</label>
+                                <input type="radio" name="comfort" value="4" id="comfort4"><label for="comfort4">挺舒服</label>
+                                <input type="radio" name="comfort" value="5" id="comfort5"><label for="comfort5">很舒服</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>⚡ 吃完后能量水平 (1-5)</label>
+                            <div class="rating-group">
+                                <input type="radio" name="energy" value="1" id="energy1"><label for="energy1">很疲劳</label>
+                                <input type="radio" name="energy" value="2" id="energy2"><label for="energy2">有点累</label>
+                                <input type="radio" name="energy" value="3" id="energy3"><label for="energy3">一般</label>
+                                <input type="radio" name="energy" value="4" id="energy4"><label for="energy4">还不错</label>
+                                <input type="radio" name="energy" value="5" id="energy5"><label for="energy5">很精神</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="hasAllergy" name="hasAllergy">
+                                有过敏或不适反应
+                            </label>
+                        </div>
+                        
+                        <div class="form-group" id="symptomsGroup" style="display:none;">
+                            <label>具体症状</label>
+                            <input type="text" id="symptoms" placeholder="如：皮肤过敏、腹胀、消化不好等">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">提交反馈</button>
+                    </form>
+                </div>
+                
+                <!-- 最近的反馈 -->
+                <h3>📌 最近的反馈</h3>
+                <div id="feedbackList" class="records-list"></div>
+            </div>
+            
+            <!-- 获得建议页面 -->
+            <div id="recommendations" class="page">
+                <h2>🎯 获得个性化建议</h2>
+                
+                <!-- 营养分析 -->
+                <div class="section">
+                    <h3>📊 你最近的营养分析</h3>
+                    <div id="nutritionSummary" class="nutrition-summary"></div>
+                </div>
+                
+                <!-- 推荐菜谱 -->
+                <div class="section">
+                    <h3>🍽️ 为你推荐的菜谱</h3>
+                    <button class="btn btn-primary" onclick="loadRecommendations()">刷新推荐</button>
+                    <div id="recommendationsList" class="recipes-list"></div>
+                </div>
+            </div>
+            
+            <!-- 个人信息页面 -->
+            <div id="profile" class="page">
+                <h2>👤 我的信息</h2>
+                <div class="form-section">
+                    <form id="profileForm" onsubmit="updateProfile(event)">
+                        <div class="form-group">
+                            <label>用户名</label>
+                            <input type="text" id="profileUsername" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>年龄</label>
+                            <input type="number" id="profileAge">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>性别</label>
+                            <select id="profileGender">
+                                <option value="">未填写</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>健康目标</label>
+                            <select id="profileGoal">
+                                <option value="">未选择</option>
+                                <option value="减脂">减脂</option>
+                                <option value="增肌">增肌</option>
+                                <option value="养生">养生</option>
+                                <option value="健康维持">健康维持</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">保存信息</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
